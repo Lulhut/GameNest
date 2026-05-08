@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameNest | Die ultimative Kommandozentrale</title>
+    
+    <!-- Hier wird dein Logo geladen -->
+    <link rel="icon" type="image/x-icon" href="Gamenest.ico">
+    
+    <!-- Google Fonts für moderne Typografie -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome für Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CSS VARIABLEN --- */
+        :root {
+            --bg-dark: #07090f;
+            --bg-card: rgba(20, 24, 34, 0.6);
+            --accent-blue: #00e1ff;
+            --accent-purple: #7000ff;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        /* --- GLOBALES RESET --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- HINTERGRUND ANIMATION (Leuchten) --- */
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 225, 255, 0.15) 0%, rgba(112, 0, 255, 0.05) 50%, transparent 70%);
+            top: -200px;
+            left: -200px;
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(60px);
+            animation: pulse 8s infinite alternate;
+        }
+
+        .bg-glow-right {
+            right: -200px;
+            left: auto;
+            top: 40%;
+            background: radial-gradient(circle, rgba(112, 0, 255, 0.12) 0%, rgba(0, 225, 255, 0.05) 50%, transparent 70%);
+            animation: pulse 10s infinite alternate-reverse;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(7, 9, 15, 0.75);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #fff, var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-container img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+            text-shadow: 0 0 10px rgba(0, 225, 255, 0.5);
+        }
+
+        /* --- BUTTONS --- */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            padding: 12px 32px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 225, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 32px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- HERO SEKTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .badge {
+            background: rgba(0, 225, 255, 0.1);
+            border: 1px solid rgba(0, 225, 255, 0.2);
+            color: var(--accent-blue);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            max-width: 900px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin-bottom: 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* --- FEATURES SEKTION --- */
+        .features {
+            padding: 120px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 70px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.4s ease, border-color 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Leuchtender Rand-Effekt beim Hover */
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 225, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--accent-blue);
+            margin-bottom: 25px;
+            background: rgba(0, 225, 255, 0.1);
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* --- SCROLL ANIMATIONEN --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            background: rgba(7, 9, 15, 0.8);
+            margin-top: 50px;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .nav-links { display: none; } /* Versteckt Links auf dem Handy für einen cleanen Look */
+            .hero-buttons { flex-direction: column; }
+            .hero p { padding: 0 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hintergrund-Leuchten -->
+    <div class="bg-glow"></div>
+    <div class="bg-glow bg-glow-right"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo-container">
+            <img src="Gamenest.ico" alt="GameNest Logo">
+            GameNest
+        </div>
+        <div class="nav-links">
+            <a href="#home">Start</a>
+            <a href="#features">Features</a>
+            <a href="#download">Download</a>
+        </div>
+        <button class="btn-primary" style="padding: 10px 20px; font-size: 0.8rem;">Beta Zugang</button>
+    </nav>
+
+    <!-- Hero Sektion -->
+    <section class="hero" id="home">
+        <div class="reveal">
+            <div class="badge">V 1.0 IST LIVE</div>
+            <h1>Alle deine Games.<br><span>Ein einziger Launcher.</span></h1>
+            <p>GameNest ist die ultimative, hochperformante Kommandozentrale. Starte Steam-Spiele, externe Software und Tools aus einem extrem cleanen und schnellen Interface.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary"><i class="fa-solid fa-download"></i> Jetzt Herunterladen</button>
+                <button class="btn-secondary"><i class="fa-solid fa-play"></i> Trailer ansehen</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Sektion -->
+    <section class="features" id="features">
+        <h2 class="section-title reveal">Warum GameNest?</h2>
+        <p class="section-subtitle reveal">Entwickelt für Gamer und Power-User, die keine Kompromisse eingehen.</p>
+        
+        <div class="features-grid">
+            
+            <!-- Karte 1 -->
+            <div class="feature-card reveal">
+                <div class="feature-icon">
+                    <i class="fa-brands fa-steam"></i>
+                </div>
+                <h3>Nahtlose Integration</h3>
+                <p>GameNest erkennt automatisch deine installierten Steam-Spiele und fügt sie deiner Bibliothek hinzu. Kein lästiges Suchen mehr.</p>
+            </div>
+
+            <!-- Karte 2 -->
+            <div class="feature-card reveal" style="transition-delay: 0.1s;">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <h3>Nicht nur für Spiele</h3>
+                <p>Füge Discord, OBS, Schnittprogramme oder beliebige andere .exe-Dateien hinzu. GameNest ist dein zentraler Hub für alles.</p>
+            </div>
+
+            <!-- Karte 3 -->
+            <div class="feature-card reveal" style="transition-delay: 0.2s;">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3>Extreme Performance</h3>
+                <p>Geschrieben mit modernsten Technologien. GameNest verbraucht kaum RAM oder CPU im Hintergrund, damit deine Spiele flüssig laufen.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 GameNest. Alle Rechte vorbehalten. Designed for Gamers.</p>
+    </footer>
+
+    <!-- JavaScript für Scroll-Animationen -->
+    <script>
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        window.addEventListener("scroll", reveal);
+        // Direkt beim Start einmal ausführen, damit Elemente im Sichtfeld laden
+        reveal();
+    </script>
+
+</body>
+</html>
